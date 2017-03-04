@@ -25,11 +25,19 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        test: /\.(png|jpg|gif)$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.scss$/,
+        loaders: 'sass'
+      },
+      {
+        test: /\.css$/, 
+        loader: 'style-loader!css-loader',
       }
     ]
   },
@@ -41,7 +49,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    port: 2012,
+    port: 2100,
     host: '0.0.0.0'
   },
   performance: {
