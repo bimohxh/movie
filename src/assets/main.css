@@ -1,4 +1,54 @@
+html,body {
+  position: relative;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system,PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Helvetica Neue,sans-serif;
+  color: #444
+}
+
+div {
+  box-sizing: border-box;
+}
+
 svg {
   width: 30px;
   height: 30px;
+}
+
+header {
+  position: fixed;
+  height: 50px;
+  top: 0;
+  width: 100%;
+  background-color: #2eaef5;
+  box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.11);
+}
+
+.search-wraper {
+  width: 140px;
+  position: absolute;
+  left: 50%;
+  margin-left: -70px;
+  top: 10px;
+}
+.search-txt {
+  border: 0;
+  padding: 6px 10px;
+  width: 100%;
+  border-radius: 100px
+}
+
+
+footer {
+  position: fixed;
+  height: 50px;
+  bottom: 0;
+  width: 100%;
+  background-color: #FFF;
+  box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.11);
+}
+
+#app {
+  height: 100%;
 }
