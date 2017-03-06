@@ -6,7 +6,7 @@ import Icon from 'vue-svg-icon/Icon.vue'
 
 Vue.component('icon', Icon);
 
-['favor', 'share', 'comment'].forEach(item => {
+['favor', 'share', 'comment', 'rank'].forEach(item => {
   Icon.inject(item)
 })
 

@@ -4,7 +4,7 @@
       div.swiper-slide(v-for="item in items")
         div.main-view
           div.img-box
-            img.cover(:src="item.cover")
+            div.cover(:style="'background-image: url(' + item.cover + ')'")
             article
               p(v-for="txt in item.text") {{txt}}
           // div.favors
@@ -18,8 +18,15 @@
               li
                 icon(name="comment")  
                 span 324  
+
+              li
+                span 2340
+                icon(name="rank") 
+                  
               li
                 icon(name="share")
+
+               
 
               li.tx
                 img(:src="item.author")  
@@ -45,7 +52,7 @@
             text: ['曾经有一份真挚的爱摆在我的面前',  '我没有珍惜',  '等到失去了才后悔莫及', '尘世中最痛苦的事莫过于此']
           },
           {
-            cover: "http://img0.imgtn.bdimg.com/it/u=1134862582,1051897568&fm=23&gp=0.jpg",
+            cover: "https://img1.doubanio.com/view/movie_poster_cover/lpst/public/p2432493858.jpg",
             author: "https://awesomes.oss-cn-beijing.aliyuncs.com/mem/170107150059-97-1.jpg",
             text: ['我怕你找不到我嘛']
           },
@@ -144,6 +151,9 @@
       width: 100%;
       border-top-right-radius: 3px;
       border-top-left-radius: 3px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
     }
 
     article {
