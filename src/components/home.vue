@@ -1,37 +1,33 @@
 <template lang="jade">
   div.swiper-container
     div.swiper-wrapper
-      div.swiper-slide(v-for="item in items")
+    div.swiper-items(style="display: none")
+      div.swiper-slide(v-for="movie in movies")
         div.main-view
-          div.img-box
+          div.img-box(v-for="item in movie.items")
             div.cover(:style="'background-image: url(' + item.cover + ')'")
             article
-              p(v-for="txt in item.text") {{txt}}
-          // div.favors
-          //   icon(name="favor")
-          //   div 30234
+              p(v-for="word in item.words") {{word}}
+      
           div.opers
             ul
               li
                 icon(name="favor")
-                span 21
+                span {{movie.favors}}
               li
                 icon(name="comment")  
-                span 324  
+                span {{movie.comments}}  
 
-              li
-                span 2340
-                icon(name="rank") 
+              // li
+              //   span 2340
+              //   icon(name="rank") 
                   
               li
                 icon(name="share")
 
-               
-
               li.tx
-                img(:src="item.author")  
-           
-          
+                img(:src="movie.author")  
+            
  </template>
 
 
@@ -41,10 +37,18 @@
   import Swiper from 'swiper'
   require('swiper/dist/css/swiper.css')
   import $ from 'jquery'
+  import AV from 'leancloud-storage'
+  AV.init({
+    appId: 'k9s0ICO4DHXHXTric0ApTJz1-gzGzoHsz',
+    appKey: '1ohAP9zGy6Uvqxsqi9yR0tXX'
+  });
+  
 
+  var mySwiper
   export default {
     data () {
       return {
+        movies: [],
         items: [
           {
             cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1488620620841&di=c444d0c8ee06b292d2adb5556becf5e3&imgtype=0&src=http%3A%2F%2Fimage2.sina.com.cn%2Fent%2Fd%2Fw%2F2007-05-23%2FU1513P28T52D852F872DT20070523190638.jpg",
@@ -69,14 +73,54 @@
         ]
       }
     },
+    methods: {
+      
+      // 获取电影列表
+      listMovie: function(mid) {
+        let query = new AV.Query('movie')
+        let _self = this
+        query.get(mid).then(movie=> {
+          let _movie = movie.toJSON()
+          _self.getMovieItems(movie).then(items => {
+            _movie.items = items
+            _self.movies.push(_movie)
+            
+          })
+        })
+      },
+
+      getMovieItems: function (movie) {
+        let query = new AV.Query('movie_item')
+        query.equalTo('movie_id', movie)
+        return new Promise(resolve => {
+          query.find().then(items=> {
+            resolve(items.map(item => {
+              return item.toJSON()
+            }))
+          })
+        })
+      }
+    },
+    created() {
+      this.listMovie('58be518fa22b9d005ef7708e')
+      let _self = this
+      setTimeout(function () {
+        _self.listMovie('58be5184570c350059b5e05c')
+      }, 2000)
+    },
     mounted () {
-      var mySwiper = new Swiper ('.swiper-container', {
-        loop: true
-      })
+      mySwiper = new Swiper ('.swiper-container')
       $('.swiper-slide').each(function () {
         $(this).find('.cover').height($(this).find('.main-view').height() - $(this).find('article').height() -50)   
       })
       
+    },
+
+    updated () {
+      let _self = this
+      $('.swiper-items .swiper-slide').each(function () {
+        mySwiper.appendSlide($(this)[0])
+      })
     }
   }
 </script>
