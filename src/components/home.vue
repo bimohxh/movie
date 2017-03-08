@@ -48,29 +48,7 @@
   export default {
     data () {
       return {
-        movies: [],
-        items: [
-          {
-            cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1488620620841&di=c444d0c8ee06b292d2adb5556becf5e3&imgtype=0&src=http%3A%2F%2Fimage2.sina.com.cn%2Fent%2Fd%2Fw%2F2007-05-23%2FU1513P28T52D852F872DT20070523190638.jpg",
-            author: "https://awesomes.oss-cn-beijing.aliyuncs.com/mem/170107150059-97-1.jpg",
-            text: ['曾经有一份真挚的爱摆在我的面前',  '我没有珍惜',  '等到失去了才后悔莫及', '尘世中最痛苦的事莫过于此']
-          },
-          {
-            cover: "https://img1.doubanio.com/view/movie_poster_cover/lpst/public/p2432493858.jpg",
-            author: "https://awesomes.oss-cn-beijing.aliyuncs.com/mem/170107150059-97-1.jpg",
-            text: ['我怕你找不到我嘛']
-          },
-          {
-            cover: "http://img4.imgtn.bdimg.com/it/u=3318983394,679068676&fm=23&gp=0.jpg",
-            author: "https://awesomes.oss-cn-beijing.aliyuncs.com/mem/170107150059-97-1.jpg",
-            text: ['想完整']
-          },
-          {
-            cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1488805721458&di=f4b1447ecf37171957db27757b6a0200&imgtype=0&src=http%3A%2F%2Fimg.tuku.cn%2Ffile_thumb%2F201504%2Fm2015040414515003.jpg",
-            author: "https://awesomes.oss-cn-beijing.aliyuncs.com/mem/170107150059-97-1.jpg",
-            text: ['没有啊', '天亮过后就会很美']
-          }
-        ]
+        movies: []
       }
     },
     methods: {
@@ -110,10 +88,6 @@
     },
     mounted () {
       mySwiper = new Swiper ('.swiper-container')
-      $('.swiper-slide').each(function () {
-        $(this).find('.cover').height($(this).find('.main-view').height() - $(this).find('article').height() -50)   
-      })
-      
     },
 
     updated () {
@@ -141,6 +115,7 @@
     height: 100%;
     padding-bottom: 50px;
     position: relative;
+    
 
     ul {
       padding: 0;
@@ -191,8 +166,12 @@
     border-radius: 3px;
     box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.11);
     background-color: #FFF;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     .cover {
       width: 100%;
+      flex-grow:1;
       border-top-right-radius: 3px;
       border-top-left-radius: 3px;
       background-repeat: no-repeat;
