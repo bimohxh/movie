@@ -31,9 +31,7 @@
  </template>
 
 
-<script>
-  require('normalize.css')
-  require('../assets/main.css')
+<script> 
   import Swiper from 'swiper'
   require('swiper/dist/css/swiper.css')
   import $ from 'jquery'
@@ -107,7 +105,6 @@
   .swiper-container {
     width: 100%;
     height: 100%;
-    padding-top: 50px;
   }
   .main-view {
     padding: 7%;

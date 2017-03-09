@@ -27,6 +27,19 @@ header {
   width: 100%;
   background-color: #2eaef5;
   box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.11);
+  z-index: 100;
+}
+
+
+.editBtn {
+  float: right;
+  margin-top: 10px;
+  margin-right: 5px;
+  display: inline-block
+}
+
+.editBtn .svg-icon {
+  fill: #FFF;
 }
 
 .search-wraper {
@@ -43,6 +56,10 @@ header {
   border-radius: 100px
 }
 
+
+.mainarea {
+  padding-top: 50px;
+}
 
 footer {
   position: fixed;
