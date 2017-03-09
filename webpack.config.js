@@ -1,7 +1,8 @@
 var path = require('path')
 var webpack = require('webpack')
+const vuxLoader = require('vux-loader')
 
-module.exports = {
+let webpackConfig = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -42,6 +43,7 @@ module.exports = {
     ]
   },
   resolve: {
+    extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     }
@@ -57,6 +59,21 @@ module.exports = {
   },
   devtool: '#eval-source-map'
 }
+
+
+
+module.exports = vuxLoader.merge(webpackConfig, {
+  plugins: [
+    {
+      name: 'vux-ui'
+    },
+    {
+      name: 'duplicate-style'
+    }
+  ]
+})
+
+
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'

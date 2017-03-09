@@ -73,3 +73,19 @@ footer {
 #app {
   height: 100%;
 }
+
+.upload-button {
+  height: 96px;
+  border: #ECECEC 1px solid;
+  background-color: #FFF;
+  margin-top: 31px;
+  border-right: 0;
+  width: 70px;
+  font-size: 13px;
+  line-height: 90px;
+  text-align: center;
+}
+
+.upload-button form {
+  height: auto!important;
+}
