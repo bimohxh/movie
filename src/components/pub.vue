@@ -7,6 +7,7 @@
       flexbox-item(:span="1/4")
         //- vue-upload(v-bind:class="['upload-button']" v-bind:crop="true" url="./crop.php" text="上传剧照" extensions="png,gif,jpeg,jpg")
     
+    upload
     group
       div.add-btn(@click="addPage()")
         icon(name="plus")
@@ -26,7 +27,8 @@
 
 
 <script>
-  import { XInput, Group, XTextarea, Panel, Flexbox, XButton  } from 'vux'
+  import { XInput, Group, XTextarea, Panel, Flexbox, FlexboxItem, XButton  } from 'vux'
+  import Upload from './upload.vue'
 
   export default {
     data () {
@@ -39,7 +41,9 @@
       'group': Group,
       'x-textarea': XTextarea,
       'flexbox': Flexbox,
-      'x-button': XButton
+      'x-button': XButton,
+      'upload': Upload,
+      'flexbox-item': FlexboxItem
     },
     methods: {
       addPage: function() {
