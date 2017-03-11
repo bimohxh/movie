@@ -72,12 +72,12 @@
 
         var createCanvas = can[0].getContext("2d")
         
-        outer.find('.upload-container').css('display', 'flex')
+        outer.find('.upload-container').show()
         cutArgs.unshift(uploadImg)
         createCanvas.drawImage.apply(createCanvas, cutArgs)
-        if (parseInt(can.width()) > $(document).width()) {
-          can.width($(document).width())
-        }
+
+        can.css('max-width', '100%')
+        can.css('max-height', '100%')
       },
 
       // 剪切
@@ -170,8 +170,6 @@
 
 <style lang="sass">
   .upload-container {
-    display: flex;
-    align-items: center;
     position: fixed;
     width: 100%;
     height: 100%;
@@ -182,6 +180,13 @@
     left: 0;
     right: 0;
     display: none;
+    padding-bottom: 80px;
+    
+    .canvas-wraper {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
 
     .upload-opers {
       position: absolute;
