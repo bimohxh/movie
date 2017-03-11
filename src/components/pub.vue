@@ -1,11 +1,8 @@
 <template lang="jade">
   div
-    flexbox(v-for="page in pages")
-      flexbox-item(:span="3/4")
-        group(title="台词 + 剧照")
-          x-textarea(placeholder="多行请回车")
-      flexbox-item(:span="1/4")
-        //- vue-upload(v-bind:class="['upload-button']" v-bind:crop="true" url="./crop.php" text="上传剧照" extensions="png,gif,jpeg,jpg")
+    div(v-for="page in pages")
+      group(title="台词 + 剧照")
+        x-textarea(placeholder="多行请回车")
     
     upload
     group
@@ -57,6 +54,7 @@
     },
 
     updated () {
+      
     }
   }
 </script>
