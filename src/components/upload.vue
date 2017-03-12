@@ -84,12 +84,14 @@
       cut: function (event) {
         let canva = $(event.target).closest('.upload-container').find('canvas')
         var pixelRatio = window.devicePixelRatio || 1
+        let _w = parseInt(canva.width() * 2 / 3)
+        let _h = parseInt(canva.height() * 2 / 3)
         canva.Jcrop({
           setSelect: [
-            40,
-            40,
-            100,
-            100
+            parseInt((canva.width() - _w) / 2),
+            parseInt((canva.height() - _h) / 2),
+            _w,
+            _h
           ],
           allowSelect: false,
           onChange: (c) => {
@@ -122,13 +124,10 @@
       complete: function () {
         // this.srcData = can.toDataURL()
         console.log(cutDara)
-        // can.height = can.height; 
-        // crop.destroy()
-        // $(can).css('width',  cutDara.w + 'px')
-        // $(can).css('height', cutDara.h + 'px') 
-
-        this.load({w: cutDara.w, h:  cutDara.h}, [cutDara.x, cutDara.y, cutDara.w, cutDara.h, 0, 0,  cutDara.w, cutDara.h])
-        // can.getContext("2d").drawImage(uploadImg, cutDara.x, cutDara.y, cutDara.w, cutDara.h, 0, 0,  cutDara.w, cutDara.h)
+        let canva = $(event.target).closest('.upload-container').find('canvas')
+        let rate_x =  uploadImg.width  * 1.00 / canva.width()
+        let rate_y = uploadImg.height  * 1.00 /  canva.height()
+        this.load({w: cutDara.w * rate_x, h:  cutDara.h * rate_y}, [cutDara.x * rate_x, cutDara.y * rate_y, cutDara.w * rate_x, cutDara.h * rate_y, 0, 0,  cutDara.w * rate_x, cutDara.h * rate_y])
       },
 
       // 上传
@@ -181,10 +180,12 @@
     right: 0;
     display: none;
     padding-bottom: 80px;
+    padding-top: 50px;
     
     .canvas-wraper {
       display: flex;
       align-items: center;
+      justify-content: center;
       height: 100%;
     }
 
