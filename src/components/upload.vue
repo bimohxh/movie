@@ -144,7 +144,7 @@
         console.log(blob)
         fd.append('avatarFile', blob, 'image.png')
         let httprequest=new XMLHttpRequest()
-        httprequest.open('POST', '/guest/avatar', true)
+        httprequest.open('POST', 'http://127.0.0.1:3000/api/upload', true)
         httprequest.send(fd)
         httprequest.onreadystatechange= function () {
           if(httprequest.status==200 && httprequest.readyState==4){
