@@ -10,7 +10,7 @@ require('./assets/form.css')
 
 Vue.component('icon', Icon);
 
-['favor', 'share', 'comment', 'rank', 'edit', 'plus', 'cut', 'cancel', 'ok'].forEach(item => {
+['favor', 'share', 'comment', 'rank', 'edit', 'plus', 'cut', 'cancel', 'ok', 'upload', 'up'].forEach(item => {
   Icon.inject(item)
 })
 

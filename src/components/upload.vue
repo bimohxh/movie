@@ -1,12 +1,18 @@
 <template lang="jade">
   div.upload-box
-    input(type="file" @change="uploadChange")
+    div.upload-btn
+      div(v-show="uploadAct.state == 'ready'")
+        icon(name="upload")
+        p 剧照
+        input.upload-file(type="file" @change="uploadChange")
+      div(v-show="uploadAct.state == 'ing'")  
+        img(:src="uploadAct.result")
     div.upload-container
       img(:src="srcData")
       div.canvas-wraper
 
       div.upload-opers
-        a(@click="uploadAct"): icon(name="cancel")
+        a(@click="cancel"): icon(name="cancel")
         a(@click="switchCut"): icon(name="cut" v-bind:class="'active-' + iscut")
         a(@click="complete"): icon(name="ok")
  </template>
@@ -32,7 +38,12 @@
       return {
         pages: [{}],
         iscut: false,
-        srcData: ''
+        srcData: '',
+        uploadAct: {
+          state: 'ready',
+          result: ''
+        }
+        
       }
     },
     components: {
@@ -121,17 +132,29 @@
       },
 
       // 完成
-      complete: function () {
-        // this.srcData = can.toDataURL()
-        console.log(cutDara)
+      complete: function (event) {
+        if (this.iscut){
+          this.cutAct()
+        }
+
+        this.uploadAct.state = 'ing'
+        this.uploadAct.result = can[0].toDataURL()
+        this.cancel(event)
+        // this.uploadGo()
+      },
+ 
+
+      // 剪切完成
+      cutAct: function () {
         let canva = $(event.target).closest('.upload-container').find('canvas')
         let rate_x =  uploadImg.width  * 1.00 / canva.width()
         let rate_y = uploadImg.height  * 1.00 /  canva.height()
         this.load({w: cutDara.w * rate_x, h:  cutDara.h * rate_y}, [cutDara.x * rate_x, cutDara.y * rate_y, cutDara.w * rate_x, cutDara.h * rate_y, 0, 0,  cutDara.w * rate_x, cutDara.h * rate_y])
       },
 
+
       // 上传
-      uploadAct: function () {
+      uploadGo: function () {
         let data = can[0].toDataURL()
         data = data.split(',')[1]
         data = window.atob(data)
@@ -141,17 +164,23 @@
         }
         let blob = new Blob([ia],{type:"image/png", endings:'transparent'})
         let fd = new FormData()
-        console.log(blob)
-        fd.append('avatarFile', blob, 'image.png')
-        let httprequest=new XMLHttpRequest()
-        httprequest.open('POST', 'http://127.0.0.1:3000/api/upload', true)
-        httprequest.send(fd)
-        httprequest.onreadystatechange= function () {
-          if(httprequest.status==200 && httprequest.readyState==4){
-              console.log(httprequest.responseText);
-              $('#returnImg').attr('src','/images/'+JSON.parse(httprequest.responseText).json);
+       
+        
+        $.get('http://movie-api.leanapp.cn/api/uptoken', (data) => {
+          fd.append('file', blob, data.filename)
+          fd.append('key', data.filename)
+          fd.append('token', data.token)
+          let httprequest=new XMLHttpRequest()
+
+          httprequest.open('POST', 'http://up.qiniu.com/', true)
+          httprequest.send(fd)
+          httprequest.onreadystatechange= function () {
+            if(httprequest.status==200 && httprequest.readyState==4){
+                console.log(httprequest.responseText);
+                $('#returnImg').attr('src','/images/'+JSON.parse(httprequest.responseText).json);
+            }
           }
-        }
+        })
       }
     },
     created() {
@@ -204,5 +233,26 @@
         }
       }
     }
+  }
+
+  .upload-btn {
+    text-align: center;
+    position: relative;
+    padding: 20px;
+
+    .upload-file {
+      display: block;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      height: 100%;
+      top: 0;
+      opacity: 0;
+    }
+
+    img {
+      width: 100%
+    }
+    
   }
 </style>
