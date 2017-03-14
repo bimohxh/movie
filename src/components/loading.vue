@@ -1,13 +1,17 @@
 <template lang="jade">
-  div.csshub-line-spin-fade-loader
-    -each val in [1,2,3,4,5,6,7,8]
-      div
+  div.loader-box
+    div.csshub-line-spin-fade-loader
+      -each val in [1,2,3,4,5,6,7,8]
+        div
 </template>
 
 
 <style lang="sass">
+  .loader-box {
+    text-align: center
+  }
   .csshub-line-spin-fade-loader {
-    margin: 100px;
+    display: inline-block;
     
   }
   @-webkit-keyframes csshub-line-spin-fade-loader {
