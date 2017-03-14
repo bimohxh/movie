@@ -8,12 +8,7 @@ require('normalize.css')
 require('./assets/main.css')
 require('./assets/form.css')
 
-Vue.component('icon', Icon);
-
-['favor', 'share', 'comment', 'rank', 'edit', 'plus', 'cut', 'cancel', 'ok', 'upload', 'up'].forEach(item => {
-  Icon.inject(item)
-})
-
+Vue.component('icon', Icon)
 
 Vue.use(VueRouter)
 

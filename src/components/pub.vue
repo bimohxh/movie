@@ -1,47 +1,61 @@
 <template lang="jade">
   div
-    div.item-wrap(v-for="(page, index) in pages")
-      div.tool-bar
-        span 帧 {{index + 1}}
-        a.oper-btn(v-show="pages.length > 1" @click="showDel(page)"): icon(name="cancel" )
-        a.right(@click="isExpand = !isExpand"): icon(name="up")
-      div(v-show="isExpand")
-        upload
-        div.taici(contenteditable="true")
-       
+    // 提交
+    template(v-if="step == 'ready'")
+      div.item-wrap(v-for="(page, index) in pages")
+        div.tool-bar
+          span 帧 {{index + 1}}
+          a.oper-btn(v-show="pages.length > 1" @click="showDel(page)"): icon(name="cancel")
+          a.right(@click="page.isExpand = !page.isExpand"): icon(name="up")
+        div(v-show="page.isExpand")
+          upload
+          // div.taici(contenteditable="true" v-model="page.words")
+          x-textarea(placeholder="台词多行请回车" v-model="page.words")
+        
 
-    confirm(v-model="isShowDel" title="确定删除该帧？" @on-confirm="onDelConfirm")
-   
+      confirm(v-model="isShowDel" title="确定删除该帧？" @on-confirm="onDelConfirm")
     
-    group
-      div.add-btn(@click="addPage()")
-        icon(name="plus")
-        span 添加一帧
-    group
-      x-input(title="影片名" v-model="value" placeholder="不用加 《》")
+      
+      group
+        div.add-btn(@click="addPage()")
+          icon(name="plus")
+          span 添加一帧
+      group
+        x-input(title="影片名" v-model="movie.name" placeholder="不用加 《》")
 
-    group
-      x-input(title="演员名" v-model="value" placeholder="多个演员用,隔开")
+      group
+        x-input(title="演员名" v-model="movie.actors" placeholder="多个演员用,隔开")
 
-    group  
-      x-textarea(placeholder="请斟酌你独一无二的推荐辞")
-    
-    group
-      x-button(type="primary") 提交
+      group  
+        x-textarea(placeholder="请斟酌你独一无二的推荐辞" v-model="movie.leads")
+      
+      group
+        x-button(type="primary" @click.native="submit") 提交
+     
+    // 提交中   
+    template(v-if="step == 'ing'")
+      loading
+
+    // 完成
+    template(v-if="step == 'end'")
+      h3 提交成功
  </template>
 
 
 <script>
   import { XInput, Group, XTextarea, Panel, Flexbox, FlexboxItem, XButton, Confirm  } from 'vux'
   import Upload from './upload.vue'
+  import Loading from './loading.vue'
+  import AV from '../lib/av'
 
   export default {
     data () {
       return {
-        pages: [{}],
+        pages: [{isExpand: true}],
         isShowDel: false,
         checkedPage: {},
-        isExpand: true
+        movie: {},
+        step: 'ing'
       }
     },
     components: {
@@ -52,11 +66,12 @@
       XButton,
       'upload': Upload,
       FlexboxItem,
-      Confirm 
+      Confirm,
+      'loading': Loading
     },
     methods: {
       addPage: function() {
-        this.pages.push({})
+        this.pages.push({isExpand: true})
       },
 
       // 移除一帧
@@ -70,6 +85,34 @@
       onDelConfirm: function () {
         var index = this.pages.indexOf(this.checkedPage)
         this.pages.splice(index, 1)  
+      },
+
+      // 保存
+      submit: function () {
+        let Movie = AV.Object.extend('movie')
+        let movie = new Movie()
+        for(let key in this.movie) {
+          movie.set(key, this.movie[key])
+        } 
+
+        movie.save().then((data) => {
+          let newMovie = AV.Object.createWithoutData('movie', data.objectId)
+          let items = this.pages.map(page => {
+            let movieItem = new AV.Object('movie_item')
+            for(let key in page) {
+              movieItem.set(key, page[key])
+            }
+
+            movieItem.set('words', page.words.split(/\n/).filter(item => {return item.length > 0}))
+            movieItem.set('movie_id', newMovie)
+            return movieItem
+          })
+
+          AV.Object.saveAll(items).then(() => {
+            console.log('成功')
+          })
+
+        })
       }
     },
     created() {

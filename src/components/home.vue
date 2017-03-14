@@ -35,12 +35,7 @@
   import Swiper from 'swiper'
   require('swiper/dist/css/swiper.css')
   import $ from 'jquery'
-  import AV from 'leancloud-storage'
-  AV.init({
-    appId: 'k9s0ICO4DHXHXTric0ApTJz1-gzGzoHsz',
-    appKey: '1ohAP9zGy6Uvqxsqi9yR0tXX'
-  });
-  
+  import AV from '../lib/av'
 
   var mySwiper
   export default {
