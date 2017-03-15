@@ -27,12 +27,28 @@
 
               li.tx
                 img(:src="movie.author")  
-            
- </template>
+     tabbar
+      tabbar-item
+        icon(name="home" slot="icon")
+        span(slot="label") 首页
+      
+      tabbar-item
+        icon(name="plus" slot="icon")
+        span(slot="label") 发布   
+        
+      tabbar-item
+        icon(name="user" slot="icon")
+        span(slot="label") 我的  
+
+       
+
+</template>
 
 
 <script> 
   import Swiper from 'swiper'
+  import { Tabbar, TabbarItem } from 'vux'
+  
   require('swiper/dist/css/swiper.css')
   import $ from 'jquery'
   import AV from '../lib/av'
@@ -43,6 +59,10 @@
       return {
         movies: []
       }
+    },
+    components: {
+      Tabbar,
+      TabbarItem
     },
     methods: {
       

@@ -91,3 +91,17 @@ footer {
 .upload-button form {
   height: auto!important;
 }
+
+/*vux pack*/
+.weui-tabbar__item {
+  text-decoration: none;
+}
+.weui-tabbar__label {
+  padding: 0;
+  margin: 0;
+}
+
+.weui-tabbar__icon svg {
+  width: 20px;
+  height: 20px;
+}
