@@ -34,18 +34,18 @@
      
     // 提交中   
     template(v-if="step == 'ing'")
-      loading
+      loading(text="提交中" value="true")
 
     // 完成
     template(v-if="step == 'end'")
-      h3 提交成功
+      msg(:buttons="okBtns" title="恭喜你，提交成功！"  description="你可以在我的发布中看到该片的状态")
+
  </template>
 
 
 <script>
-  import { XInput, Group, XTextarea, Panel, Flexbox, FlexboxItem, XButton, Confirm  } from 'vux'
+  import { XInput, Group, XTextarea, Panel, Flexbox, FlexboxItem, XButton, Confirm, Loading, Msg  } from 'vux'
   import Upload from './upload.vue'
-  import Loading from './loading.vue'
   import AV from '../lib/av'
 
   export default {
@@ -55,7 +55,12 @@
         isShowDel: false,
         checkedPage: {},
         movie: {},
-        step: 'ing'
+        step: 'ready',
+        okBtns: [ {
+          type: 'default',
+          text: '回到首页',
+          link: '/'
+        }]
       }
     },
     components: {
@@ -67,7 +72,8 @@
       'upload': Upload,
       FlexboxItem,
       Confirm,
-      'loading': Loading
+      Loading,
+      Msg 
     },
     methods: {
       addPage: function() {
@@ -78,8 +84,6 @@
       showDel: function(page) {
         this.checkedPage = 
         this.isShowDel = page
-
-        
       },
 
       onDelConfirm: function () {
@@ -95,6 +99,9 @@
           movie.set(key, this.movie[key])
         } 
 
+        this.step = 'ing'
+        let _self = this
+
         movie.save().then((data) => {
           let newMovie = AV.Object.createWithoutData('movie', data.objectId)
           let items = this.pages.map(page => {
@@ -109,7 +116,7 @@
           })
 
           AV.Object.saveAll(items).then(() => {
-            console.log('成功')
+            _self.step = 'end'
           })
 
         })

@@ -8,7 +8,8 @@
 
 <style lang="sass">
   .loader-box {
-    text-align: center
+    text-align: center;
+    height: 100px;
   }
   .csshub-line-spin-fade-loader {
     display: inline-block;
