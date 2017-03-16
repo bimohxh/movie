@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "deploy": "webon deploy"
   },
   "dependencies": {
     "css-loader": "^0.25.0",
@@ -23,7 +24,8 @@
     "vue-router": "^2.3.0",
     "vue-svg-icon": "^1.2.1",
     "vux": "^2.1.1-rc.7",
-    "vux-loader": "^1.0.46"
+    "vux-loader": "^1.0.46",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -36,6 +38,7 @@
     "vue-template-compiler": "^2.2.1",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "webon": "^1.1.5"
   }
 }
