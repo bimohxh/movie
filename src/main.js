@@ -3,12 +3,14 @@ import Home from './components/home.vue'
 import Pub from './components/pub.vue'
 import VueRouter from 'vue-router'
 import Icon from 'vue-svg-icon/Icon.vue'
+import Footer from './components/footer.vue'
 
 require('normalize.css')
 require('./assets/main.css')
 require('./assets/form.css')
 
 Vue.component('icon', Icon)
+Vue.component('v-footer', Footer)
 
 Vue.use(VueRouter)
 

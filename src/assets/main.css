@@ -60,7 +60,8 @@ header {
 
 .mainarea {
   padding-top: 50px;
-  height: 100%
+  height: 100%;
+  padding-bottom: 50px;
 }
 
 footer {
@@ -92,16 +93,4 @@ footer {
   height: auto!important;
 }
 
-/*vux pack*/
-.weui-tabbar__item {
-  text-decoration: none;
-}
-.weui-tabbar__label {
-  padding: 0;
-  margin: 0;
-}
-
-.weui-tabbar__icon svg {
-  width: 20px;
-  height: 20px;
-}
+ 
