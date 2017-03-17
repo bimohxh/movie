@@ -1,5 +1,6 @@
 <template lang="jade">
-     tabbar
+  footer
+    tabbar
       tabbar-item(link="/")
         icon(name="home" slot="icon")
         span(slot="label") 首页
@@ -30,6 +31,11 @@
 
 
 <style lang="sass">
+  footer {
+    height: 50px;
+    flex-shrink:0
+  }
+
   .weui-tabbar__item {
     text-decoration: none;
   }
@@ -49,6 +55,6 @@
   }
 
   .weui-tabbar {
-    position: fixed!important
+    position: relative!important
   }
 </style>

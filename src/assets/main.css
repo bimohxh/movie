@@ -22,13 +22,10 @@ svg {
 }
 
 header {
-  position: fixed;
   height: 50px;
-  top: 0;
-  width: 100%;
   background-color: #2eaef5;
   box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.11);
-  z-index: 100;
+  flex-shrink:0
 }
 
 
@@ -57,21 +54,17 @@ header {
   border-radius: 100px
 }
 
+#app {
+  display: flex;
+  flex-direction: column
+}
 
 .mainarea {
-  padding-top: 50px;
   height: 100%;
-  padding-bottom: 50px;
+  overflow-y: scroll
 }
 
-footer {
-  position: fixed;
-  height: 50px;
-  bottom: 0;
-  width: 100%;
-  background-color: #FFF;
-  box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.11);
-}
+
 
 #app {
   height: 100%;

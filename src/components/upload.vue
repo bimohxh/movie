@@ -5,8 +5,9 @@
         icon(name="upload")
         p 剧照
         input.upload-file(type="file" @change="uploadChange")
-      div(v-show="uploadAct.state == 'ing'")  
+      div(v-show="uploadAct.state != 'ready'" v-bind:class="'state-' + uploadAct.state")  
         img(:src="uploadAct.result")
+        span.tip 上传中...
     div.upload-container
       img(:src="srcData")
       div.canvas-wraper
@@ -34,6 +35,7 @@
   let cutDara = {}
   let canwrap
   export default {
+    props: ['page', 'prefix'],
     data () {
       return {
         pages: [{}],
@@ -127,7 +129,9 @@
       cancel: function (event) {
         $(event.target).closest('.upload-container').hide()
         $(event.target).closest('.upload-box').find('input[type=file]').val('')  
-        crop.release()
+        if (crop ) {
+          crop.release()
+        }
         this.iscut = false
       },
 
@@ -140,7 +144,7 @@
         this.uploadAct.state = 'ing'
         this.uploadAct.result = can[0].toDataURL()
         this.cancel(event)
-        // this.uploadGo()
+        this.uploadGo()
       },
  
 
@@ -155,6 +159,7 @@
 
       // 上传
       uploadGo: function () {
+        let _self = this
         let data = can[0].toDataURL()
         data = data.split(',')[1]
         data = window.atob(data)
@@ -166,7 +171,7 @@
         let fd = new FormData()
        
         
-        $.get('http://movie-api.leanapp.cn/api/uptoken', (data) => {
+        $.get('http://movie-api.leanapp.cn/api/uptoken', {prefix: this.prefix}, (data) => {
           fd.append('file', blob, data.filename)
           fd.append('key', data.filename)
           fd.append('token', data.token)
@@ -175,9 +180,10 @@
           httprequest.open('POST', 'http://up.qiniu.com/', true)
           httprequest.send(fd)
           httprequest.onreadystatechange= function () {
-            if(httprequest.status==200 && httprequest.readyState==4){
-                console.log(httprequest.responseText);
-                $('#returnImg').attr('src','/images/'+JSON.parse(httprequest.responseText).json);
+            if(httprequest.status == 200 && httprequest.readyState==4){
+               _self.uploadAct.state = 'end'
+               _self.$emit('upval', _self.page, JSON.parse(httprequest.responseText).key)
+               console.log(httprequest.responseText);
             }
           }
         })
@@ -202,7 +208,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.99);
-    z-index: 200;
+    z-index: 2000;
     top: 0;
     bottom: 0;
     left: 0;
@@ -252,6 +258,24 @@
 
     img {
       width: 100%
+    }
+
+    .tip {
+      display: none;
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      text-align: center;
+      width: 100%;
+    }
+
+    .state-ing {
+      img {
+        opacity: 0.1
+      }
+      .tip {
+        display: block
+      }
     }
     
   }

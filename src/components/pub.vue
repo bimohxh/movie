@@ -8,8 +8,7 @@
           a.oper-btn(v-show="pages.length > 1" @click="showDel(page)"): icon(name="cancel")
           a.right(@click="page.isExpand = !page.isExpand"): icon(name="up")
         div(v-show="page.isExpand")
-          upload
-          // div.taici(contenteditable="true" v-model="page.words")
+          upload(v-on:upval="getUploadSrc" v-bind:page="page" prefix="movie")
           x-textarea(placeholder="台词多行请回车" v-model="page.words")
         
 
@@ -29,8 +28,9 @@
       group  
         x-textarea(placeholder="请斟酌你独一无二的推荐辞" v-model="movie.leads")
       
-      group
-        x-button(type="primary" @click.native="submit") 提交
+      div(style="padding: 30px; padding-top: 0;")
+        group
+          x-button(type="primary" @click.native="submit") 提交
      
     // 提交中   
     template(v-if="step == 'ing'")
@@ -82,7 +82,7 @@
 
       // 移除一帧
       showDel: function(page) {
-        this.checkedPage = 
+        this.checkedPage = page
         this.isShowDel = page
       },
 
@@ -120,6 +120,11 @@
           })
 
         })
+      },
+
+      // 获取上传图片地址
+      getUploadSrc: function (page, key) {
+        page.cover = key
       }
     },
     created() {
