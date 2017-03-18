@@ -19,8 +19,6 @@
 <script> 
   import { Tabbar, TabbarItem } from 'vux'
   export default {
-    data () {
-    },
     components: {
       Tabbar,
       TabbarItem

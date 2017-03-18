@@ -43,13 +43,14 @@
 
   var mySwiper
 
-  let latestTime = false
-  let noMore = false
   export default {
     data () {
       return {
         movies: [],
-        currentSwiper: 0
+        currentSwiper: 0,
+        latestTime: false,
+        noMore: false,
+        isFirst: true
       }
     },
     components: {
@@ -59,23 +60,29 @@
       
       // 获取电影列表
       listMovie: function(mid) {
-        if(noMore) { return }
+        if(this.noMore) { return }
         this.loadNext()
         let lastIndex = this.movies.length - 1
         let query = new AV.Query('movie')
         let _self = this
         query.descending('createdAt')
-        if (latestTime) {
-          query.lessThan('createdAt', latestTime)
+        if (this.latestTime) {
+          query.lessThan('createdAt', this.latestTime)
         }
         query.limit(1)
         query.first().then(movie=> {
           if (!movie) {
-            noMore = true
+            _self.noMore = true
             return
           }
+          
           let _movie = movie.toJSON()
-          latestTime = new Date(_movie.createdAt)
+          _self.latestTime = new Date(_movie.createdAt)
+          
+          if (_self.isFirst) {
+            _self.listMovie()
+            _self.isFirst = false
+          }
           _self.getMovieItems(movie).then(items => {
             _movie.items = items
             _self.movies.splice(lastIndex, 1, _movie)
@@ -114,9 +121,6 @@
         }
       })
       this.listMovie()
-      setTimeout(function () {
-        _self.listMovie()
-      }, 100)
     },
 
     updated () {
