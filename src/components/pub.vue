@@ -103,7 +103,6 @@
         let _self = this
 
         movie.save().then((data) => {
-          let newMovie = AV.Object.createWithoutData('movie', data.objectId)
           let items = this.pages.map(page => {
             let movieItem = new AV.Object('movie_item')
             for(let key in page) {
@@ -111,7 +110,7 @@
             }
 
             movieItem.set('words', page.words.split(/\n/).filter(item => {return item.length > 0}))
-            movieItem.set('movie_id', newMovie)
+            movieItem.set('movie_id', data)
             return movieItem
           })
 
