@@ -5,7 +5,8 @@
       div.swiper-slide(v-for="movie in movies")
         div.main-view
           div.img-box(v-for="item in movie.items")
-            div.cover(:style="'background-image: url(' + item.cover + ')'")
+            div.cover(:style="'background-image: url(' + cdn(item.cover) + ')'" v-show="item.cover")
+            loading(v-show="!item.cover")
             article
               p(v-for="word in item.words") {{word}}
       
@@ -38,28 +39,46 @@
   require('swiper/dist/css/swiper.css')
   import $ from 'jquery'
   import AV from '../lib/av'
+  import Loading from './loading'
 
   var mySwiper
+
+  let latestTime = false
+  let noMore = false
   export default {
     data () {
       return {
-        movies: []
+        movies: [],
+        currentSwiper: 0
       }
     },
     components: {
+      'loading': Loading
     },
     methods: {
       
       // 获取电影列表
       listMovie: function(mid) {
+        if(noMore) { return }
+        this.loadNext()
+        let lastIndex = this.movies.length - 1
         let query = new AV.Query('movie')
         let _self = this
-        query.get(mid).then(movie=> {
+        query.descending('createdAt')
+        if (latestTime) {
+          query.lessThan('createdAt', latestTime)
+        }
+        query.limit(1)
+        query.first().then(movie=> {
+          if (!movie) {
+            noMore = true
+            return
+          }
           let _movie = movie.toJSON()
+          latestTime = new Date(_movie.createdAt)
           _self.getMovieItems(movie).then(items => {
             _movie.items = items
-            _self.movies.push(_movie)
-            
+            _self.movies.splice(lastIndex, 1, _movie)
           })
         })
       },
@@ -74,21 +93,33 @@
             }))
           })
         })
+      },
+
+      // 加载下一张
+      loadNext: function () {
+        this.movies.push({items: [{cover: undefined, words: undefined}]})
       }
     },
     created() {
-      this.listMovie('58be518fa22b9d005ef7708e')
       let _self = this
-      setTimeout(function () {
-        _self.listMovie('58be5184570c350059b5e05c')
-      }, 2000)
     },
     mounted () {
-      mySwiper = new Swiper ('.swiper-container')
+      let _self = this
+      mySwiper = new Swiper ('.swiper-container', {
+        onSlideChangeEnd: function (swiper) {
+          if (swiper.activeIndex > _self.currentSwiper) {
+            _self.listMovie()
+          }
+          _self.currentSwiper = swiper.activeIndex
+        }
+      })
+      this.listMovie()
+      setTimeout(function () {
+        _self.listMovie()
+      }, 100)
     },
 
     updated () {
-      let _self = this
       $('.swiper-items .swiper-slide').each(function () {
         mySwiper.appendSlide($(this)[0])
       })

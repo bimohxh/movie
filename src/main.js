@@ -12,6 +12,16 @@ require('./assets/form.css')
 Vue.component('icon', Icon)
 Vue.component('v-footer', Footer)
 
+
+Vue.use({
+  install: function (Vue, options) {
+    Vue.prototype.cdn = (src) => {
+      return `http://movie.awesomes.cn/${src}`
+    }
+  }
+})
+
+
 Vue.use(VueRouter)
 
 const routes = [

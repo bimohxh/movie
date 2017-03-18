@@ -9,10 +9,18 @@
 <style lang="sass">
   .loader-box {
     text-align: center;
-    height: 100px;
+    height: 70px;
+    width: 70px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -35px;
+    margin-left: -35px;
   }
   .csshub-line-spin-fade-loader {
     display: inline-block;
+    position: absolute;
+    top: 25px;
     
   }
   @-webkit-keyframes csshub-line-spin-fade-loader {
@@ -32,9 +40,6 @@
     } 
   }
 
-  .csshub-line-spin-fade-loader {
-    position: relative;
-  }
 
   .csshub-line-spin-fade-loader > div:nth-child(1) {
       top: 20px;
