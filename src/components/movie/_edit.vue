@@ -6,6 +6,7 @@
         div.tool-bar
           span 帧 {{index + 1}}
           a.oper-btn(v-show="pages.length > 1" @click="showDel(page)"): icon(name="cancel")
+          a.oper-btn(v-show="pages.length > 1" @click="sortPage(index)"): icon(name="sort")
           a.right(@click="page.isExpand = !page.isExpand"): icon(name="up")
         div(v-show="page.isExpand")
           upload(v-on:upval="getUploadSrc" v-bind:page="page" prefix="movie")
@@ -48,12 +49,27 @@
   import Upload from '../upload.vue'
   import AV from '../../lib/av'
 
+
+  // 过滤 leancloud 保留字段
+  let filterFields = (fileds) => {
+    let filters = ['createdAt', 'updatedAt', 'objectId']
+    let obj = {}
+    for(let key in fileds) {
+      if (filters.indexOf(key) < 0) {
+        obj[key] = fileds[key]
+      }
+    }
+    return obj
+  }
+
   export default {
     props: ['movie'],
     data () {
       return {
         isShowDel: false,
         checkedPage: {},
+        pages: [{isExpand: true, words: ''}],
+        mymovie: {},
         step: 'ready',
         okBtns: [ {
           type: 'default',
@@ -62,16 +78,15 @@
         }]
       }
     },
-    computed: {
-      mymovie () {
-        return this.movie || {}
-      },
-      pages () {
-        let _pages = this.mymovie.items || [{isExpand: true, words: []}]
+    watch: {
+      movie: function () {
+        this.mymovie = this.movie || {}
+        let _pages = this.movie.items || [{isExpand: true, words: []}]
         _pages.forEach(item => {
           item.words = item.words.join('\n')
         })
-        return _pages
+
+        this.pages = _pages
       }
     },
     components: {
@@ -91,6 +106,11 @@
         this.pages.push({isExpand: true})
       },
 
+      // 排序
+      sortPage: function(index) {
+        this.pages.splice(index - 1, 0, this.pages.splice(index, 1)[0])
+      },
+
       // 移除一帧
       showDel: function(page) {
         this.checkedPage = page
@@ -101,17 +121,20 @@
         var index = this.pages.indexOf(this.checkedPage)
         this.pages.splice(index, 1)  
       },
-
-      // 提交
-      submit: function () {
-        this.mymovie.objectId ? this.update() : this.save()
-      },
+      
+ 
 
       // 保存
-      save: function () {
+      submit: function () {
         let Movie = AV.Object.extend('movie')
         let movie = new Movie()
-        for(let key in this.mymovie) {
+
+        // 更新
+        if (this.mymovie.objectId) {
+          movie = AV.Object.createWithoutData('movie', this.mymovie.objectId)
+        }
+
+        for(let key in filterFields(this.mymovie)) {
           movie.set(key, this.mymovie[key])
         } 
 
@@ -121,12 +144,20 @@
         movie.save().then((data) => {
           let items = this.pages.map(page => {
             let movieItem = new AV.Object('movie_item')
-            for(let key in page) {
+            
+            // 更新
+            if (page.objectId) {
+              movieItem = AV.Object.createWithoutData('movie_item', page.objectId)
+            } else {
+              movieItem.set('movie_id', data)  
+            }
+
+            for(let key in filterFields(page)) {
               movieItem.set(key, page[key])
             }
 
             movieItem.set('words', page.words.split(/\n/).filter(item => {return item.length > 0}))
-            movieItem.set('movie_id', data)
+
             return movieItem
           })
 
@@ -135,11 +166,6 @@
           })
 
         })
-      },
-
-      // 更新
-      update: function () {
-        console.log('更新')
       },
 
       // 获取上传图片地址
@@ -155,7 +181,6 @@
     
 
     updated () {
-      //$('.taici').html().split(/<[^<>]+>/g).filter(item => {return item.length > 0})
     }
   }
 </script>

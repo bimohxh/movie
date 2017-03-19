@@ -26,6 +26,10 @@
               li
                 icon(name="share")
 
+              li
+                router-link(:to="{name: 'movie_edit', params: {id: movie.objectId}}")
+                  icon(name="edit")  
+
               li.tx
                 img(:src="movie.author")  
        

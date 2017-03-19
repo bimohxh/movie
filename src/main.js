@@ -44,6 +44,7 @@ const routes = [
     children: [
       {
         path: 'edit',
+        name: 'movie_edit',
         component: MovieEdit
       }
     ]
